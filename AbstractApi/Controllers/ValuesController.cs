@@ -36,7 +36,7 @@ namespace AbstractApi.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var result = Query<UserQuery, User, UserParameter>(new UserParameter { Id = id });
+            var result = Query<UserQuery, QueryResult<User>, UserParameter>(new UserParameter { Id = id });
             return Ok(result);
         }
 

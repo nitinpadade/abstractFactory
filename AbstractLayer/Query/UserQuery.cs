@@ -3,11 +3,38 @@ using AbstractLayer.Parameter;
 
 namespace AbstractLayer.Query
 {
-    public class UserQuery : IQuery<User, UserParameter>
+    public class UserQuery : IQuery<QueryResult<User>, UserParameter>
     {
-        public User Execute(UserParameter parameters)
+        public QueryResult<User> Execute(UserParameter parameters)
         {
-            return new User { Id = 1, Name = "Devansh N Padade", Message = parameters.Id.ToString() };
+            try
+            {
+                var result = new User
+                {
+                    Id = 1,
+                    Name = "Devansh N Padade",
+                    Message = parameters.Id.ToString()
+                };
+
+                return new QueryResult<User>()
+                {
+                    Data = result != null ? result : new User(),
+                    IsExecuted = true,
+                    Message = "Query Executed Successfully",
+                    Status = CommandQueryStatus.Executed
+                };
+            }
+            catch (System.Exception ex)
+            {
+                return new QueryResult<User>()
+                {
+                    Data = new User(),
+                    IsExecuted = true,
+                    Message = "Query Executed Successfully",
+                    ErrorMessage = ex.ToString(),
+                    Status = CommandQueryStatus.Executed
+                };
+            }
         }
     }
 }
