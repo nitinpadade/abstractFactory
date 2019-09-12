@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AbstractLayer;
-using AbstractLayer.Client;
-using AbstractLayer.Command;
+﻿using AbstractLayer.Client;
 using AbstractLayer.Factory;
-using AbstractLayer.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace AbstractApi
 {
@@ -30,9 +20,11 @@ namespace AbstractApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);            
-            services.AddScoped<CommandFactory, ConcreteCommandFactory>();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddScoped<CommandFactory, ConcreteCommandFactory>();            
             services.AddScoped<ICommandHandler, CommandHandler>();
+            services.AddScoped<QueryFactory, ConcreteQueryFactory>();
+            services.AddScoped<IQueryExecutor, QueryExecutor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

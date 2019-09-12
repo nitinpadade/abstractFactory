@@ -7,34 +7,37 @@ using AbstractLayer.Client;
 using AbstractLayer.Command;
 using AbstractLayer.Factory;
 using AbstractLayer.Model;
+using AbstractLayer.Parameter;
+using AbstractLayer.Query;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AbstractApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
-    {
-        public readonly ICommandHandler _command;
-       
-        public ValuesController(ICommandHandler command)
-        {
-            _command = command;
+    public class ValuesController : BaseController
+    { 
+        public ValuesController(ICommandHandler command, IQueryExecutor query)
+            : base(command, query)
+            
+        {          
 
         }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            var result = _command.Dispatch<UserCommand, User>(new User { Id = 1, Name = "Devansh" });
+            var result = Command<UserCommand, User>(new User { Id = 1, Name = "Devansh" });
             return new string[] { result.Message };
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            var result = Query<UserQuery, User, UserParameter>(new UserParameter { Id = id });
+            return Ok(result);
         }
 
         // POST api/values
